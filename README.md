@@ -1,3 +1,26 @@
+# Zynq Build
+
+Clone `https://github.com/ToNi3141/Quake3e.git` in the same directory where you have cloned `https://github.com/ToNi3141/Rasterix.git` and build it:
+```sh
+git clone https://github.com/ToNi3141/Quake3e.git
+cd Quake3e
+export SYSROOTS=/opt/petalinux/2022.2/sysroots
+cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=../Rasterix/toolchains/toolchain_zynq.cmake
+cmake --build build/ --config Release --parallel
+```
+
+Copy the following files into the Quake directory on your target:
+```sh
+scp build/quake3e.arm build/quake3e.ded.arm build/libquake3e_opengl_arm.so petalinux@192.168.2.111:/home/petalinux/Quake3Arena/
+``` 
+Rename `libquake3e_opengl_arm.so` into `quake3e_"opengl"_arm.so`. 
+
+Copy or link the `libGL.so` from the Rasterix repository as `libGL.so.1` into the Quake directory. Copy or link the `libSDL2-2.0.so` as `libSDL2-2.0.so.0` into the Quake directory. Note: You can build the SDL2 with the same commands as you have build Quake.
+
+Run it via a terminal in your window manager on the device as `./quake3e.arm`. It is important that you do it from the window manager, if not, then you are probably not able to control the game.
+
+Note: The performance can be affected when the Lightning is set to `Lightmap`. Use `Vertex` instead. The game should then be playable with a decent frame rate.
+
 # Quake3e
 
 [![build](../../workflows/build/badge.svg)](../../actions?query=workflow%3Abuild) * <a href="https://discord.com/invite/X3Exs4C"><img src="https://img.shields.io/discord/314456230649135105?color=7289da&logo=discord&logoColor=white" alt="Discord server" /></a>
